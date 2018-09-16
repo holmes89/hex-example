@@ -27,9 +27,13 @@ func main() {
 
 	switch *dbType {
 	case "psql":
-		ticketRepo = psql.NewPostgresTicketRepository(postgresConnection("postgresql://postgres@localhost/ticket?sslmode=disable"))
+		pconn := postgresConnection("postgresql://postgres@localhost/ticket?sslmode=disable")
+		defer pconn.Close()
+		ticketRepo = psql.NewPostgresTicketRepository(pconn)
 	case "redis":
-		ticketRepo = redisdb.NewRedisTicketRepository(redisConnection("localhost:6379"))
+		rconn := redisConnection("localhost:6379")
+		defer rconn.Close()
+		ticketRepo = redisdb.NewRedisTicketRepository(rconn)
 	default:
 		panic("Unknown database")
 	}

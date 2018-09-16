@@ -1,8 +1,9 @@
 package ticket
 
 import (
-	"github.com/google/uuid"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type TicketService interface {
@@ -29,8 +30,7 @@ func (s *ticketService) CreateTicket(ticket *Ticket) error {
 	return s.repo.Create(ticket)
 }
 
-
-func (s *ticketService) FindTicketById(id string) (*Ticket, error){
+func (s *ticketService) FindTicketById(id string) (*Ticket, error) {
 	return s.repo.FindById(id)
 }
 

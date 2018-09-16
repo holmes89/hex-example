@@ -2,8 +2,9 @@ package ticket
 
 import (
 	"encoding/json"
-	"github.com/gorilla/mux"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 type TicketHandler interface {
@@ -53,7 +54,7 @@ func (h *ticketHandler) Create(w http.ResponseWriter, r *http.Request) {
 
 	response, _ := json.Marshal(ticket)
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
+	w.WriteHeader(http.StatusCreated)
 	_, _ = w.Write(response)
 
 }
