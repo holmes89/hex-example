@@ -28,13 +28,16 @@ func (suite *TicketServiceTestSuite) SetupTest() {
 }
 
 func (suite *TicketServiceTestSuite) TestCreate() {
+	//Arrange
 	t := &ticket.Ticket{
 		Creator: "Joel",
 	}
 	suite.ticketRepo.EXPECT().Create(gomock.AssignableToTypeOf(&ticket.Ticket{})).Return(nil)
 
+	//Act
 	err := suite.underTest.CreateTicket(t)
 
+	//Assert
 	suite.NoError(err, "Shouldn't error")
 	suite.NotNil(t.ID, "should not be null")
 	suite.NotNil(t.Created, "should not be null")
