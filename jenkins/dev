@@ -1,0 +1,15 @@
+pipeline {
+  stages {
+    stage ('Get Code')
+      git 'git@github.com:Holmes89/hex-example.git'
+    }
+    stage ('Test') {
+      agent{
+        docker { image 'golang:1.11.0-stretch'}
+      }
+      steps {
+        sh 'go get ./...'
+        sh 'go test ./...'
+      }
+    }
+}
