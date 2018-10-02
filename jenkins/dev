@@ -2,23 +2,40 @@ pipeline {
   agent none
   stages {
     stage ('Get Code') {
-      agent{
-        node {
-          label 'master'
-        }
-      }
+      agent any
       steps {
         git 'https://github.com/Holmes89/hex-example.git'
       }
     }
     stage ('Test') {
       agent{
-        docker { image 'golang:1.11.0-stretch'}
+        docker {
+            image 'golang:stretch'
+            args '-e XDG_CACHE_HOME=/tmp/.cache'
+        }
       }
       steps {
-        sh 'go get ./...'
-        sh 'go test ./...'
+          script {
+            sh 'go get -t ./...'
+            sh 'go test ./...'
+          }
       }
+    }
+    stage ('Container') {
+        agent {
+            node {
+                label 'master'
+            }
+        }
+        steps {
+          script {
+            app = docker.build("holmes89/hex-example")
+            docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
+                app.push("${env.GIT_COMMIT}")
+                app.push("latest")
+            }
+          }
+        }
     }
   }
 }
