@@ -37,7 +37,7 @@ func (suite *TicketHandlerTestSuite) TestCreate() {
 	t := &ticket.Ticket{
 		Creator: "Joel",
 	}
-	suite.ticketService.EXPECT().CreateTicket(gomock.AssignableToTypeOf(&ticket.Ticket{})).Return(nil)
+	suite.ticketService.EXPECT().CreateTicket(gomock.Eq(t)).Return(nil)
 
 	body, _ := json.Marshal(t)
 	r, _ := http.NewRequest("POST", "/tickets", bytes.NewBuffer(body))

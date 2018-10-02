@@ -32,7 +32,7 @@ func (suite *TicketServiceTestSuite) TestCreate() {
 	t := &ticket.Ticket{
 		Creator: "Joel",
 	}
-	suite.ticketRepo.EXPECT().Create(gomock.AssignableToTypeOf(&ticket.Ticket{})).Return(nil)
+	suite.ticketRepo.EXPECT().Create(gomock.Any()).Return(nil)
 
 	//Act
 	err := suite.underTest.CreateTicket(t)
