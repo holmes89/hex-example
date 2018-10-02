@@ -2,8 +2,13 @@ pipeline {
   agent none
   stages {
     stage ('Get Code') {
+      agent{
+        node {
+          label 'master'
+        }
+      }
       steps {
-        git 'git@github.com:Holmes89/hex-example.git'
+        git 'https://github.com/Holmes89/hex-example.git'
       }
     }
     stage ('Test') {
