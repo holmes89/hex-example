@@ -31,7 +31,7 @@ pipeline {
           script {
             app = docker.build("holmes89/hex-example")
             docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-                app.push("${env.GIT_COMMIT}")
+                app.push("${GIT_COMMIT}")
                 app.push("latest")
             }
           }
