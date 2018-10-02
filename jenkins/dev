@@ -1,6 +1,7 @@
 pipeline {
+  agent none
   stages {
-    stage ('Get Code')
+    stage ('Get Code') {
       git 'git@github.com:Holmes89/hex-example.git'
     }
     stage ('Test') {
@@ -12,4 +13,5 @@ pipeline {
         sh 'go test ./...'
       }
     }
+  }
 }
