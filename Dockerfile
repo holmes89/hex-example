@@ -5,7 +5,7 @@ RUN apk update \
     && apk add git \
     && cd /go/src/hex-example \
     && go get ./... \
-    && CGO_ENABLED=0 GOOS=linux go build main.go
+    && CGO_ENABLED=0 GOOS=linux go build -ldflags "-w -X main.docker=true" main.go
 
 FROM scratch
 MAINTAINER "Joel Holmes <holmes89@gmail.com>"

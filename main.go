@@ -13,14 +13,19 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/apex/gateway"
 	"github.com/go-redis/redis"
 	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
 )
 
+var docker string
+
 func main() {
 
+	var server bool
 	dbType := flag.String("database", "redis", "database type [redis, psql]")
+	flag.BoolVar(&server, "server", false, "run in server mode")
 	flag.Parse()
 
 	var ticketRepo ticket.TicketRepository
@@ -50,8 +55,13 @@ func main() {
 
 	errs := make(chan error, 2)
 	go func() {
-		fmt.Println("Listening on port :3000")
-		errs <- http.ListenAndServe(":3000", nil)
+		if server || docker == "true" {
+			fmt.Println("Listening server mode on port :3000")
+			errs <- http.ListenAndServe(":3000", nil)
+		} else {
+			fmt.Println("Listening lambda mode on port :3000")
+			errs <- gateway.ListenAndServe(":3000", nil)
+		}
 	}()
 	go func() {
 		c := make(chan os.Signal, 1)
