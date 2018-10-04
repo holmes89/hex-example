@@ -1,8 +1,5 @@
 pipeline {
   agent none
-  environment {
-    tag = sh(returnStdout: true, script: "git tag --sort version:refname | tail -1").trim()
-  }
   stages {
     stage ('Get Code') {
       agent any
@@ -41,6 +38,7 @@ pipeline {
       agent any
       steps {
         script {
+          def tag = sh(returnStdout: true, script: "git tag --sort version:refname | tail -1").trim()
           app = docker.build("holmes89/hex-example")
           docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
               app.push(tag)
