@@ -1,8 +1,8 @@
 pipeline {
+  agent none
   environment {
     tag = sh(returnStdout: true, script: "git tag --sort version:refname | tail -1").trim()
   }
-  agent none
   stages {
     stage ('Get Code') {
       agent any
