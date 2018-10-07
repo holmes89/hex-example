@@ -21,5 +21,5 @@ variable "env_vars" {
 
 variable "stage" {
     default = "api"
-    description "Stage for deployment"
+    description = "Stage for deployment"
 }

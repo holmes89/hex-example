@@ -1,5 +1,5 @@
 resource "aws_lambda_function" "lambda_func" {
-  function_name = "${var.display_name}"
+  function_name = "${var.name}"
 
   # The bucket name as created earlier with "aws s3api create-bucket"
   s3_bucket = "${var.bucket}"
@@ -102,7 +102,7 @@ resource "aws_api_gateway_deployment" "lambda_func" {
   ]
 
   rest_api_id = "${aws_api_gateway_rest_api.lambda_func.id}"
-  stage_name  = ${stage}
+  stage_name  = "${var.stage}"
 }
 
 resource "aws_lambda_permission" "apigw" {

@@ -6,4 +6,9 @@ zip main.zip main
 
 aws s3 cp main.zip s3://hex-lambda/$TAG/main.zip
 
+cd terraform/prod/
+
 terraform apply -var "app_version=$TAG" -auto-approve
+
+cd ../../
+rm -rf main.zip
