@@ -19,6 +19,11 @@ import (
 	_ "github.com/lib/pq"
 )
 
+const (
+	DefaultRedisUrl      = "localhost:6379"
+	DefaultRedisPassword = ""
+)
+
 var docker string
 
 func main() {
@@ -36,7 +41,9 @@ func main() {
 		defer pconn.Close()
 		ticketRepo = psql.NewPostgresTicketRepository(pconn)
 	case "redis":
-		rconn := redisConnection("localhost:6379")
+		var redisUrl = envString("REDIS_URL", DefaultRedisUrl)
+		var redisPassword = envString("REDIS_PASSWORD", DefaultRedisPassword)
+		rconn := redisConnect(redisUrl, redisPassword)
 		defer rconn.Close()
 		ticketRepo = redisdb.NewRedisTicketRepository(rconn)
 	default:
@@ -72,13 +79,13 @@ func main() {
 	fmt.Printf("terminated %s", <-errs)
 
 }
+func redisConnect(url string, password string) *redis.Client {
 
-func redisConnection(url string) *redis.Client {
 	fmt.Println("Connecting to Redis DB")
 	client := redis.NewClient(&redis.Options{
 		Addr:     url,
-		Password: "", // no password set
-		DB:       0,  // use default DB
+		Password: password, // no password set
+		DB:       0,        // use default DB
 	})
 	err := client.Ping().Err()
 
@@ -86,6 +93,7 @@ func redisConnection(url string) *redis.Client {
 		panic(err)
 	}
 	return client
+
 }
 
 func postgresConnection(database string) *sql.DB {
@@ -110,4 +118,12 @@ func accessControl(h http.Handler) http.Handler {
 
 		h.ServeHTTP(w, r)
 	})
+}
+
+func envString(env, fallback string) string {
+	e := os.Getenv(env)
+	if e == "" {
+		return fallback
+	}
+	return e
 }
