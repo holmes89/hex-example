@@ -1,3 +1,6 @@
+def tag = 'UNKNOWN'
+def hash = 'UNKNOWN'
+
 pipeline {
   agent none
   stages {
@@ -68,10 +71,11 @@ pipeline {
             sh 'zip main.zip main'
             sh 'aws s3 cp main.zip s3://hex-lambda/${hash}/main.zip'
             sh 'ls'
-            sh 'cd terraform/qa/'
-            sh 'ls'
-            sh 'terraform init'
-            sh 'terraform apply -var "app_version=$hash" -auto-approve'
+            dir("terraform/qa"){
+              sh 'ls'
+              sh 'terraform init'
+              sh 'terraform apply -var "app_version=$hash" -auto-approve'
+            }
           }
         }
     }
@@ -83,9 +87,11 @@ pipeline {
           tag = sh(returnStdout: true, script: "git tag --sort version:refname | tail -1").trim()
           sh 'zip main.zip main'
           sh 'aws s3 cp main.zip s3://hex-lambda/${tag}/main.zip'
-          sh 'cd terraform/prod/'
-          sh 'terraform init'
-          sh 'terraform apply -var "app_version=${tag}" -auto-approve'
+          dir("terraform/prod"){
+            sh 'ls'
+            sh 'terraform init'
+            sh 'terraform apply -var "app_version=$hash" -auto-approve'
+          }
         }
       }
     }
