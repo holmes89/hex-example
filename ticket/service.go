@@ -26,7 +26,7 @@ func (s *ticketService) CreateTicket(ticket *Ticket) error {
 	ticket.ID = uuid.New().String()
 	ticket.Created = time.Now()
 	ticket.Updated = time.Now()
-	ticket.Status = "open"
+	ticket.Status = "TEST"
 	return s.repo.Create(ticket)
 }
 
