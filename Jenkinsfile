@@ -21,6 +21,20 @@ pipeline {
           }
       }
     }
+    stage ('Build') {
+      agent{
+        docker {
+            image 'golang:stretch'
+            args '-e XDG_CACHE_HOME=/tmp/.cache'
+        }
+      }
+      steps {
+          script {
+            sh 'go get ./...'
+            sh 'GOOS=linux go build -o main main.go'
+          }
+      }
+    }
     stage ('Container') {
         agent any
         steps {
@@ -43,6 +57,30 @@ pipeline {
           docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
               app.push(tag)
           }
+        }
+      }
+    }
+    stage ('Deploy') {
+        agent any
+        steps {
+          script {
+            def hash = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
+            sh 'zip main.zip main'
+            sh 'aws s3 cp main.zip s3://hex-lambda/$hash/main.zip'
+            sh 'cd terraform/prod/'
+            sh 'terraform apply -var "app_version=$hash" -auto-approve'
+          }
+        }
+    }
+    stage ('Prod Deploy') {
+      when { buildingTag() }
+      agent any
+      steps {
+        script {
+          sh 'zip main.zip main'
+          sh 'aws s3 cp main.zip s3://hex-lambda/$tag/main.zip'
+          sh 'cd terraform/prod/'
+          sh 'terraform apply -var "app_version=$tag" -auto-approve'
         }
       }
     }
