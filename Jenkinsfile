@@ -69,10 +69,10 @@ pipeline {
           script {
             hash = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
             sh 'zip main.zip main'
-            sh 'aws s3 cp main.zip s3://hex-lambda/${HASH}/main.zip'
+            sh 'aws s3 cp main.zip s3://hex-lambda/${env.HASH}/main.zip'
             dir("terraform/qa"){
               sh 'terraform init'
-              sh 'terraform apply -var "app_version=${HASH}" -auto-approve'
+              sh 'terraform apply -var "app_version=${env.HASH}" -auto-approve'
             }
           }
         }
@@ -82,12 +82,11 @@ pipeline {
       agent any
       steps {
         script {
-          tag = sh(returnStdout: true, script: "git tag --sort version:refname | tail -1").trim()
           sh 'zip main.zip main'
-          sh 'aws s3 cp main.zip s3://hex-lambda/${TAG}/main.zip'
+          sh 'aws s3 cp main.zip s3://hex-lambda/${env.TAG}/main.zip'
           dir("terraform/prod"){
             sh 'terraform init'
-            sh 'terraform apply -var "app_version=${TAG}" -auto-approve'
+            sh 'terraform apply -var "app_version=${env.TAG}" -auto-approve'
           }
         }
       }
