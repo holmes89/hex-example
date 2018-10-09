@@ -42,9 +42,10 @@ pipeline {
         agent any
         steps {
           script {
+            hash = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
             app = docker.build("holmes89/hex-example")
             docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-                app.push("${GIT_COMMIT}")
+                app.push("${hash}")
                 app.push("latest")
             }
           }
@@ -67,7 +68,6 @@ pipeline {
         agent any
         steps {
           script {
-            hash = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
             sh 'zip main.zip main'
             sh "aws s3 cp main.zip s3://hex-lambda/${hash}/main.zip"
             dir("terraform/qa"){
