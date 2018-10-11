@@ -1,5 +1,5 @@
 resource "aws_lambda_function" "lambda_func" {
-  function_name = "${var.name}"
+  function_name = "${var.name}-${var.stage}"
 
   # The bucket name as created earlier with "aws s3api create-bucket"
   s3_bucket = "${var.bucket}"
@@ -117,7 +117,7 @@ resource "aws_lambda_permission" "apigw" {
 }
 
 resource "aws_iam_policy" "lambda_logging" {
-  name = "${var.name}-logging"
+  name = "${var.name}-${var.stage}-logging"
   path = "/"
   description = "IAM policy for logging from a lambda"
 
