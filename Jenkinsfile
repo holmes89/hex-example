@@ -65,7 +65,7 @@ pipeline {
       }
     }
     stage ('Deploy QA') {
-        when { not buildingTag() }
+        when { not { buildingTag() } }
         agent any
         steps {
           script {
