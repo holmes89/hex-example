@@ -21,7 +21,7 @@ resource "aws_lambda_function" "lambda_func" {
 # IAM role which dictates what other AWS services the Lambda function
 # may access.
 resource "aws_iam_role" "lambda_exec" {
-  name = "${var.name}-role"
+  name = "${var.name}-${var.stage}-role"
 
   assume_role_policy = <<EOF
 {
@@ -50,7 +50,7 @@ resource "aws_lambda_permission" "allow_api_gateway" {
 
 
 resource "aws_api_gateway_rest_api" "lambda_func" {
-  name        = "${var.name}-api"
+  name        = "${var.name}-${var.stage}-api"
   description = "REST API for ${var.display_name}"
 }
 
