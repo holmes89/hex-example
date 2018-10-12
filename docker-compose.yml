@@ -1,0 +1,12 @@
+version: '2'
+services:
+  db:
+    image: redis
+  gira:
+    image: hex-example:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=db:6379
+    depends_on:
+      - db

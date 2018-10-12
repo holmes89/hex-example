@@ -22,6 +22,7 @@ import (
 const (
 	DefaultRedisUrl      = "localhost:6379"
 	DefaultRedisPassword = ""
+	DefaultPostgresUrl   = "postgresql://postgres@localhost/ticket?sslmode=disable"
 )
 
 var docker string
@@ -29,21 +30,23 @@ var docker string
 func main() {
 
 	var server bool
-	dbType := flag.String("database", "redis", "database type [redis, psql]")
+	var dbType, dbURL, redisPassword string
+	flag.StringVar(&dbType, "database", "redis", "database type [redis, psql]")
 	flag.BoolVar(&server, "server", false, "run in server mode")
 	flag.Parse()
 
 	var ticketRepo ticket.TicketRepository
 
-	switch *dbType {
+	switch dbType {
 	case "psql":
-		pconn := postgresConnection("postgresql://postgres@localhost/ticket?sslmode=disable")
+		dbURL = envString("DATABASE_URL", DefaultPostgresUrl)
+		pconn := postgresConnection(dbURL)
 		defer pconn.Close()
 		ticketRepo = psql.NewPostgresTicketRepository(pconn)
 	case "redis":
-		var redisUrl = envString("REDIS_URL", DefaultRedisUrl)
-		var redisPassword = envString("REDIS_PASSWORD", DefaultRedisPassword)
-		rconn := redisConnect(redisUrl, redisPassword)
+		dbURL = envString("DATABASE_URL", DefaultRedisUrl)
+		redisPassword = envString("REDIS_PASSWORD", DefaultRedisPassword)
+		rconn := redisConnect(dbURL, redisPassword)
 		defer rconn.Close()
 		ticketRepo = redisdb.NewRedisTicketRepository(rconn)
 	default:

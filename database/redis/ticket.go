@@ -12,14 +12,13 @@ type ticketRepository struct {
 	connection *redis.Client
 }
 
-
 func NewRedisTicketRepository(connection *redis.Client) ticket.TicketRepository {
 	return &ticketRepository{
 		connection,
 	}
 }
 
-func (r *ticketRepository)	Create(ticket *ticket.Ticket) error {
+func (r *ticketRepository) Create(ticket *ticket.Ticket) error {
 	encoded, err := json.Marshal(ticket)
 
 	if err != nil {

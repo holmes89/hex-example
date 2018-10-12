@@ -8,8 +8,10 @@ RUN apk update \
     && CGO_ENABLED=0 GOOS=linux go build -ldflags "-w -X main.docker=true" main.go
 
 FROM scratch
-MAINTAINER "Joel Holmes <holmes89@gmail.com>"
+LABEL maintainer="Joel Holmes <holmes89@gmail.com>"
 ENV PORT 3000
 EXPOSE 3000
+ENV DATABASE_URL=""
+ENV REDIS_PASSWORD=""
 COPY --from=build-env /go/src/hex-example /
 CMD ["/main"]
