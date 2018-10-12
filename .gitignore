@@ -1,3 +1,4 @@
+**/*~
 # Binaries for programs and plugins
 *.exe
 *.exe~
@@ -23,3 +24,10 @@ main
 
 # .tfvars files
 *.tfvars
+
+# Python Stuff
+
+__pycache__
+robotenv
+/tests/acceptance/*.html
+/tests/acceptance/*.xml
