@@ -94,5 +94,20 @@ pipeline {
         }
       }
     }
+    stage ('Acceptance Tests'){
+      agent{
+        docker {
+            image 'python:3.7-alpine'
+        }
+      }
+      steps {
+        script {
+          dir("tests/acceptance"){
+            sh 'source .env'
+            sh 'robot -v HOST:${lambda_url}'
+          }
+        }
+      }
+    }
   }
 }
