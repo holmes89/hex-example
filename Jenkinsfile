@@ -74,6 +74,7 @@ pipeline {
             dir("terraform/qa"){
               sh 'terraform init'
               sh "terraform apply -var \"app_version=${hash}\" -auto-approve"
+              lambda_url = sh(returnStdout: true, script: "terraform output url").trim()
             }
           }
         }
@@ -88,6 +89,7 @@ pipeline {
           dir("terraform/prod"){
             sh 'terraform init'
             sh "terraform apply -var \"app_version=${tag}\" -auto-approve"
+            lambda_url = sh(returnStdout: true, script: "terraform output url").trim()
           }
         }
       }
