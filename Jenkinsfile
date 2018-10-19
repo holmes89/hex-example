@@ -1,6 +1,6 @@
 def tag = 'UNKNOWN'
 def hash = 'UNKNOWN'
-def lambda_url = 'UNKNOWN'
+def endpoint = 'UNKNOWN'
 
 pipeline {
   agent none
@@ -90,7 +90,7 @@ pipeline {
           dir("terraform/prod"){
             sh 'terraform init'
             sh "terraform apply -var \"app_version=${tag}\" -auto-approve"
-            lambda_url = sh(returnStdout: true, script: "terraform output url").trim()
+            endpoint = sh(returnStdout: true, script: "terraform output url").trim()
           }
         }
       }
@@ -98,8 +98,8 @@ pipeline {
     stage ('Acceptance Tests'){
       agent{
         docker {
-            image 'python:3.7-alpine'
-            args '-u root -e HOME=${env.WORKSPACE} -e TEST_ENDPOINT=${lambda_url}'
+            image 'python:3.7-stretch'
+            args '-u root:sudo -e HOME=${env.WORKSPACE} -e TEST_ENDPOINT=${endpoint}'
         }
       }
       steps {
