@@ -106,7 +106,7 @@ pipeline {
         script {
             dir("tests/acceptance"){
               sh '''python -m venv robotenv
-                    source robotenv/bin/activate
+                    . robotenv/bin/activate
                     pip install -r requirements.txt
                     robot -v HOST:$TEST_ENDPOINT'''
             }
