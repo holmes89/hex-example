@@ -99,15 +99,16 @@ pipeline {
       agent{
         docker {
             image 'python:3.7'
-            args '-u root:sudo -e HOME=${env.WORKSPACE} -e TEST_ENDPOINT=${endpoint}'
+            args "-u root:sudo -e HOME=${env.WORKSPACE} -e TEST_ENDPOINT=${endpoint}"
         }
       }
       steps {
         script {
             dir("tests/acceptance"){
-              sh '''python -m venv robotenv
+              sh '''rm -rf robotenv
+                    python -m venv robotenv
                     . robotenv/bin/activate
-                    pip install -r requirements.txt
+                    pip install --user -r requirements.txt
                     robot -v HOST:$TEST_ENDPOINT'''
             }
         }
