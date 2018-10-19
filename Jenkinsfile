@@ -103,9 +103,11 @@ pipeline {
       }
       steps {
         script {
-          dir("tests/acceptance"){
-            sh '''sudo source .env
-                  sudo robot -v HOST:${lambda_url}'''
+        withEnv(["HOME=${env.WORKSPACE}"]) {
+            dir("tests/acceptance"){
+              sh '''sudo source .env
+                    sudo robot -v HOST:${lambda_url}'''
+            }
           }
         }
       }
