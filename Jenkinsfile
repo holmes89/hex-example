@@ -99,14 +99,14 @@ pipeline {
       agent{
         docker {
             image 'python:3.7-alpine'
-            args '-u root:sudo -e HOME=${env.WORKSPACE}'
+            args '-u root:sudo -e HOME=${env.WORKSPACE} -e TEST_ENDPOINT=${lambda_url}'
         }
       }
       steps {
         script {
             dir("tests/acceptance"){
               sh '''source .env
-                    robot -v HOST:${lambda_url}'''
+                    robot -v HOST:$TEST_ENDPOINT'''
             }
         }
       }
