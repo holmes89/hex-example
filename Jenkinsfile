@@ -75,7 +75,7 @@ pipeline {
             dir("terraform/qa"){
               sh 'terraform init'
               sh "terraform apply -var \"app_version=${hash}\" -auto-approve"
-              lambda_url = sh(returnStdout: true, script: "terraform output url").trim()
+              endpoint = sh(returnStdout: true, script: "terraform output url").trim()
             }
           }
         }
@@ -108,8 +108,8 @@ pipeline {
               sh '''rm -rf robotenv
                     python -m venv robotenv
                     . robotenv/bin/activate
-                    pip install --user -r requirements.txt
-                    robot -v HOST:$TEST_ENDPOINT'''
+                    pip install -r requirements.txt
+                    sudo robot -v HOST:$TEST_ENDPOINT'''
             }
         }
       }
