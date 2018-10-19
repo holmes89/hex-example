@@ -99,17 +99,15 @@ pipeline {
       agent{
         docker {
             image 'python:3.7-alpine'
-            args '-u 0'
+            args '-u root:sudo -e HOME=${env.WORKSPACE}'
         }
       }
       steps {
         script {
-        withEnv(["HOME=${env.WORKSPACE}"]) {
             dir("tests/acceptance"){
               sh '''source .env
                     robot -v HOST:${lambda_url}'''
             }
-          }
         }
       }
     }
