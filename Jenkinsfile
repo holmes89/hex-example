@@ -98,7 +98,7 @@ pipeline {
     stage ('Acceptance Tests'){
       agent{
         docker {
-            image 'python:3.7-stretch'
+            image 'python:3.7'
             args '-u root:sudo -e HOME=${env.WORKSPACE} -e TEST_ENDPOINT=${endpoint}'
         }
       }
