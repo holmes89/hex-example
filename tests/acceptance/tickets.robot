@@ -32,4 +32,3 @@ Get Ticket
 	Should Be Equal As Strings		${resp.status_code}	200
 	Dictionary Should Contain Value		${resp.json()}		${ticket_id}
 	Dictionary Should Contain Value		${resp.json()}		Joel
-	

@@ -1,5 +1,6 @@
 def tag = 'UNKNOWN'
 def hash = 'UNKNOWN'
+def lambda_url = 'UNKNOWN'
 
 pipeline {
   agent none
@@ -103,8 +104,8 @@ pipeline {
       steps {
         script {
           dir("tests/acceptance"){
-            sh 'source .env'
-            sh 'robot -v HOST:${lambda_url}'
+            sh '''source .env
+                  robot -v HOST:${lambda_url}'''
           }
         }
       }
