@@ -12,7 +12,7 @@ provider "aws" {
 module "hex-api" {
   source = "../modules/api-lambda"
 
-  name = "hex-example"
+  name = "gira"
   display_name = "Hex Example"
   bucket = "hex-lambda"
   app_version = "${var.app_version}"
