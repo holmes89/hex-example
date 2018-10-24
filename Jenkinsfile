@@ -98,18 +98,14 @@ pipeline {
     stage ('Acceptance Tests'){
       agent{
         docker {
-            image 'python:3.7'
+            image 'holmes89/robotframework:latest'
             args "-e HOME=${env.WORKSPACE} -e TEST_ENDPOINT=${endpoint}"
         }
       }
       steps {
         script {
             dir("tests/acceptance"){
-              sh '''rm -rf robotenv
-                    python -m venv robotenv
-                    . robotenv/bin/activate
-                    pip install -r requirements.txt
-                    robot -v HOST:$TEST_ENDPOINT'''
+              sh "robot -v HOST:$TEST_ENDPOINT"
             }
         }
       }
