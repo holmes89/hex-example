@@ -18,7 +18,7 @@ module "hex-api" {
   app_version = "${var.app_version}"
   stage = "qa"
   env_vars = {
-      REDIS_URL = "${var.redis_url}"
+      DATABASE_URL = "${var.redis_url}"
       REDIS_PASSWORD = "${var.redis_pswd}"
   }
 }
