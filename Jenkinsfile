@@ -39,7 +39,7 @@ pipeline {
           }
       }
     }
-  /*  stage ('Container') {
+    stage ('Container') {
         agent any
         steps {
           script {
@@ -51,7 +51,7 @@ pipeline {
             }
           }
         }
-    }*/
+    }
     stage ('Tag Container') {
       when { buildingTag() }
       agent any
