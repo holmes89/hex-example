@@ -105,7 +105,7 @@ pipeline {
       steps {
         script {
             dir("tests/acceptance"){
-              sh "robot -v HOST:${endpoint}"
+              sh "robot -v HOST:${endpoint} tickets.robot"
             }
         }
       }
