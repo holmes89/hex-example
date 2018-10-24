@@ -39,7 +39,7 @@ pipeline {
           }
       }
     }
-    stage ('Container') {
+  /*  stage ('Container') {
         agent any
         steps {
           script {
@@ -51,7 +51,7 @@ pipeline {
             }
           }
         }
-    }
+    }*/
     stage ('Tag Container') {
       when { buildingTag() }
       agent any
@@ -99,13 +99,13 @@ pipeline {
       agent{
         docker {
             image 'holmes89/robotframework:latest'
-            args "-e HOME=${env.WORKSPACE} -e TEST_ENDPOINT=${endpoint}"
+            args "-e HOME=${env.WORKSPACE}"
         }
       }
       steps {
         script {
             dir("tests/acceptance"){
-              sh "robot -v HOST:$TEST_ENDPOINT"
+              sh "robot -v HOST:${endpoint}"
             }
         }
       }
