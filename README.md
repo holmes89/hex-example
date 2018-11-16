@@ -40,5 +40,7 @@ This project will continue to evolve and change depending on things I'm interest
 ## Run Acceptance Tests
 
 `cd tests/acceptance`
+
 `source .env`
+
 `robot -v HOST:${endpoint} tickets.robot`
