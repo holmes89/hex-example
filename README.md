@@ -30,11 +30,13 @@ This project will continue to evolve and change depending on things I'm interest
 ### Flags
 
 `--database` - either `redis` or `psql`
+
 `--server` - runs in sever mode
 
 ### Environment
 
 `DATABASE_URL` - Override local database url
+
 `REDIS_PASSWORD` - Override default Redis Password
 
 ## Run Acceptance Tests
