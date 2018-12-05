@@ -3,7 +3,7 @@ services:
   db:
     image: redis
   gira:
-    image: hex-example:latest
+    image: ticket-api:latest
     ports:
       - "3000:3000"
     environment:
