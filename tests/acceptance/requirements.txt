@@ -7,4 +7,4 @@ requests-oauthlib==1.0.0
 robotframework==3.0.4
 robotframework-extendedrequestslibrary==0.5.5
 robotframework-requests==0.4.7
-urllib3==1.23
+urllib3==1.24.2
